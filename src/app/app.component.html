@@ -5,6 +5,7 @@
 <progress max="100" [value]="person.age"></progress>
 <img width="100" [src]="person.avatar" alt="image" />
 <hr />
+
 <h1>Event (Binding)</h1>
 <button [disabled]="btnDisabled">Enviar</button>
 <button (click)="toggleButton()">Toggle Button</button>
@@ -20,14 +21,60 @@
 <p>Nombre {{ person.name }}</p>
 <input type="text" [value]="person.name" (keyup)="changeName($event)" />
 <hr />
+
 <h1>Data [(Binding)] con NgModel</h1>
 <p>Nombre {{ person.name }}</p>
 <input type="text" required #nameInput="ngModel" [(ngModel)]="person.name" />
 <p>Valid: {{ nameInput.valid }}</p>
 <p>Age {{ person.age }}</p>
-<input type="number" max="30" min="18" required #ageInput="ngModel" [(ngModel)]="person.age" />
+<input
+  type="number"
+  max="30"
+  min="18"
+  required
+  #ageInput="ngModel"
+  [(ngModel)]="person.age"
+/>
 <p>Valid: {{ ageInput.valid }}</p>
 <hr />
+
+<h1>*ngIf</h1>
+<input type="text" required [(ngModel)]="person.name" />
+<input type="number" required [(ngModel)]="person.age" />
+<p *ngIf="person.name === 'ivan'">Soy Ivan</p>
+<p *ngIf="person.name === 'julian' && person.age === 18; else elseBlock">
+  Soy Julian
+</p>
+<!-- Agrego un template para ejecutar el bloque mediante un else
+a traves del #<nombre> -->
+<ng-template #elseBlock>
+  <p>Bloque de else</p>
+</ng-template>
+<hr />
+
+<h1>*ngFor</h1>
+<input type="text" required [(ngModel)]="newName" />
+<button (click)="addName()">Add name</button>
+<ul>
+  <p *ngIf="names.length === 0">No hay nombres</p>
+  <li *ngFor="let name of names; index as i">
+    {{ i }} {{ name }}
+    <button (click)="deleteName(i)">Delete</button>
+  </li>
+</ul>
+<hr />
+
+<h1>*ngFor Objs</h1>
+<div>
+  <div *ngFor="let product of products">
+    <img width="200" [src]="product.image" alt="image">
+    <h2>{{ product.price }}</h2>
+    <p>{{ product.name }}</p>
+  </div>
+</div>
+
+<hr>
+
 <h1>Hola Mundo!</h1>
 <h2>{{ "Hola Mundo!".repeat(5) }}</h2>
 <p>3 + 3 = {{ 3 + 3 }}</p>
