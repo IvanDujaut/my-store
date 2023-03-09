@@ -67,13 +67,46 @@ a traves del #<nombre> -->
 <h1>*ngFor Objs</h1>
 <div>
   <div *ngFor="let product of products">
-    <img width="200" [src]="product.image" alt="image">
+    <img width="200" [src]="product.image" alt="image" />
     <h2>{{ product.price }}</h2>
     <p>{{ product.name }}</p>
   </div>
 </div>
+<hr />
 
-<hr>
+<h1>ngSwitch</h1>
+<input type="text" required [(ngModel)]="person.name" />
+<!-- Tenemos 3 ngIf que condicionan al parrafo respecto
+a lo que se ingresa en el input, es muy engorroso
+por eso en este tipo de casos conviene usa en Switch -->
+<!-- <p *ngIf="person.name === 'ivan'">
+  La persona es Ivan
+</p>
+
+<p *ngIf="person.name === 'julian'">
+  La persona es Julian
+</p>
+
+<p *ngIf="person.name === 'camilo'">
+  La persona es Camilo
+</p> -->
+
+<div [ngSwitch]="person.name">
+  <p *ngSwitchCase="'ivan'">
+    La persona es Ivan
+  </p>
+
+  <p *ngSwitchCase="'julian'">
+    La persona es Julian
+  </p>
+
+  <p *ngSwitchCase="'camilo'">
+    La persona es Camilo
+  </p>
+  <p *ngSwitchDefault>No hace match con ninguno</p>
+</div>
+
+<hr />
 
 <h1>Hola Mundo!</h1>
 <h2>{{ "Hola Mundo!".repeat(5) }}</h2>
