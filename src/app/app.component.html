@@ -1,12 +1,32 @@
-<h1>Propiedades</h1>
-<!-- Puedo controlar ele stado del buton desde la logica de mi componente -->
-<button [disabled]="btnDisabled">Enviar</button>
-<input type="text" [value]="person.name">
-<progress max="100" [value]="person.age"></progress>
-<img width="100" [src]="person.avatar" alt="image">
-<hr>
-<h1>Hola Mundo!</h1>
-<h2>{{'Hola Mundo!'.repeat(5)}}</h2>
-<p> 3 + 3 = {{ 3 + 3}}</p>
-<h3>Hola, soy {{ name }} y tengo {{ age }}</h3>
-<img src={{img}} alt="image">
+<h1>
+  Property Binding/h1>
+  <!-- Puedo controlar ele stado del buton desde la logica de mi componente -->
+  <button [disabled]="btnDisabled">Enviar</button>
+  <input type="text" [value]="person.name" />
+  <progress max="100" [value]="person.age"></progress>
+  <img width="100" [src]="person.avatar" alt="image" />
+  <hr />
+  <h1>Event Binding</h1>
+  <button [disabled]="btnDisabled">Enviar</button>
+  <button (click)="toggleButton()">Toggle Button</button>
+  <p>Edad {{ person.age }}</p>
+  <button (click)="increaseAge()">Age ++</button>
+  <div class="box" (scroll)="onScroll($event)">
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum
+      distinctio culpa unde magnam, tempore dolores sequi magni velit ab, quod,
+      excepturi reprehenderit nobis voluptate labore maxime ex ipsa! Adipisci,
+      iste.
+    </p>
+  </div>
+  <p>Nombre {{person.name}} </p>
+  <input type="text" [value]="person.name" (keyup)="changeName($event)" />
+  <hr />
+  <h1></h1>
+  <hr />
+  <h1>Hola Mundo!</h1>
+  <h2>{{ "Hola Mundo!".repeat(5) }}</h2>
+  <p>3 + 3 = {{ 3 + 3 }}</p>
+  <h3>Hola, soy {{ name }} y tengo {{ age }}</h3>
+  <img src="{{ img }}" alt="image" />
+</h1>
