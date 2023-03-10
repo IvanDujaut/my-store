@@ -30,6 +30,16 @@
   }
 }
 
+.line-error {
+  height: 0;
+  &.invalid {
+    border-bottom: 5px solid red;
+  }
+  &.valid {
+    border-bottom: 5px solid green;
+  }
+}
+
 .styles {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

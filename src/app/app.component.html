@@ -92,17 +92,11 @@ por eso en este tipo de casos conviene usa en Switch -->
 </p> -->
 
 <div [ngSwitch]="person.name">
-  <p *ngSwitchCase="'ivan'">
-    La persona es Ivan
-  </p>
+  <p *ngSwitchCase="'ivan'">La persona es Ivan</p>
 
-  <p *ngSwitchCase="'julian'">
-    La persona es Julian
-  </p>
+  <p *ngSwitchCase="'julian'">La persona es Julian</p>
 
-  <p *ngSwitchCase="'camilo'">
-    La persona es Camilo
-  </p>
+  <p *ngSwitchCase="'camilo'">La persona es Camilo</p>
   <p *ngSwitchDefault>No hace match con ninguno</p>
 </div>
 <hr />
@@ -125,7 +119,35 @@ por eso en este tipo de casos conviene usa en Switch -->
     <img [style.width.px]="widthImg" [src]="person.avatar" alt="image" />
   </div>
 </div>
-<hr>
+<hr />
+
+<h1>ngClass & ngStyle</h1>
+<input type="text" required #nameInput4="ngModel" [(ngModel)]="person.name" />
+<hr class="line-error"
+  [ngClass]="{
+    'valid': nameInput4.valid,
+    'invalid': nameInput4.invalid
+  }"
+/>
+<p class="message-error" [class.invalid]="nameInput4.invalid">
+  El campo es requerido
+</p>
+<div class="styles">
+  <div>
+    <input type="number" [(ngModel)]="box.width" />
+    <input type="number" [(ngModel)]="box.height" />
+    <input type="color" [(ngModel)]="box.background" />
+  </div>
+  <div>
+    <div [ngStyle]="{
+      'width.px': box.width,
+      'height.px': box.height,
+      'background-color': box.background,
+      'display': 'block'
+    }"></div>
+  </div>
+</div>
+<hr />
 
 <h1>Hola Mundo!</h1>
 <h2>{{ "Hola Mundo!".repeat(5) }}</h2>

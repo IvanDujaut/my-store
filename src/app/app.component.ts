@@ -19,6 +19,11 @@ export class AppComponent {
   }
   names: (string | number)[] = ['Nico', 'Ivan', 'Santi', 12];
   newName = '';
+  box = {
+    width: 100,
+    height: 100,
+    background: 'red',
+  }
 
   //Array de objetos del tipo Product
   products: Product[] = [
