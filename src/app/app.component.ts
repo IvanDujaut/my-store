@@ -7,6 +7,7 @@ import { Product } from './product.model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  widthImg = 10;
   name = 'Ivan'; // 👈 public
   age = 28;
   img = 'https://www.w3schools.com/howto/img_avatar.png';
