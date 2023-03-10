@@ -1,3 +1,25 @@
+<h1>Formulario</h1>
+<form (ngSubmit)="onRegister()" #myForm="ngForm"> <!--#<nombre>: template variable, ngForm: instruccion, en donde podemos usar la variable para usarla en alguna especie de validacion-->
+  <div class="input-group">
+    <label for="">Nombre</label>
+    <input type="text" name="name" required id="name" [(ngModel)]="register.name">
+    <p>Mensaje de error</p>
+  </div>
+  <div class="input-group">
+    <label for="">Email</label>
+    <input type="email" name="email" required id="email" [(ngModel)]="register.email">
+    <p>Mensaje de error</p>
+  </div>
+  <div class="input-group">
+    <label for="">Contraseña</label>
+    <input type="password" name="password" required id="password" [(ngModel)]="register.password">
+    <p>Mensaje de error</p>
+  </div>
+  <button [disabled]="myForm.invalid" type="submit">Registrar</button>
+  <button type="button">Accion</button>
+</form>
+<hr>
+
 <h1>Property [Binding]</h1>
 <!-- Puedo controlar ele stado del buton desde la logica de mi componente -->
 <button [disabled]="btnDisabled">Enviar</button>
