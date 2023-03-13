@@ -9,6 +9,7 @@ import { Product_Response } from './models/product.models'
 export class AppComponent {
 
   imgParent = '';
+  showImg = true;
   // renderizar una familia de productos
   // desde el padre
   products: Product_Response[] = [
@@ -41,5 +42,9 @@ export class AppComponent {
 
   public onLoaded(img: string): void {
     console.log('log padre', img);
+  }
+
+  public toggleImg(): void {
+    this.showImg = !this.showImg;
   }
 }
