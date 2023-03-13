@@ -9,6 +9,9 @@ import { Product_Response } from '../../models/product.models'
 })
 export class ProductsComponent implements OnInit {
 
+  myShoppingCart: Product_Response[] = [];
+  total = 0;
+
   // renderizar una familia de productos
   // desde el padre
   products: Product_Response[] = [
@@ -42,4 +45,9 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onAddToShoppingCart(product: Product_Response): void {
+    this.myShoppingCart.push(product);
+    this.total = this.myShoppingCart.reduce((sum, item) => sum + item.price, 0);
+    console.log(product);
+  }
 }
