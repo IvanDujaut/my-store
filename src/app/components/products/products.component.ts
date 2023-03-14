@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Product_Response } from '../../models/product.models'
+import { StoreService } from '../../services/store.service'
 
 @Component({
   selector: 'app-products',
@@ -40,14 +41,18 @@ export class ProductsComponent implements OnInit {
       image: './assets/images/books.jpg'
     },
   ];
-  constructor() { }
+
+  constructor(
+    private storeService: StoreService
+  ) {
+    this.myShoppingCart = this.storeService.getShoppingCart();
+  }
 
   ngOnInit(): void {
   }
 
   onAddToShoppingCart(product: Product_Response): void {
-    this.myShoppingCart.push(product);
-    this.total = this.myShoppingCart.reduce((sum, item) => sum + item.price, 0);
-    console.log(product);
+    this.storeService.addProduct(product);
+    this.total = this.storeService.getTotal();
   }
 }
