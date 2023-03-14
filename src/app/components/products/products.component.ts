@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Product_Response } from '../../models/product.models'
 import { StoreService } from '../../services/store.service'
+import { ProductsService } from '../../services/products.service'
 
 @Component({
   selector: 'app-products',
@@ -15,40 +16,21 @@ export class ProductsComponent implements OnInit {
 
   // renderizar una familia de productos
   // desde el padre
-  products: Product_Response[] = [
-    {
-      id: '1',
-      name: 'EL mejor juguete',
-      price: 565,
-      image: './assets/images/toy.jpg'
-    },
-    {
-      id: '2',
-      name: 'Bicicleta casi nueva',
-      price: 356,
-      image: './assets/images/bike.jpg'
-    },
-    {
-      id: '3',
-      name: 'Colleción de albumnes',
-      price: 34,
-      image: './assets/images/album.jpg'
-    },
-    {
-      id: '4',
-      name: 'Mis libros',
-      price: 23,
-      image: './assets/images/books.jpg'
-    },
-  ];
+  products: Product_Response[] = [];
 
   constructor(
-    private storeService: StoreService
+    private storeService: StoreService,
+    private productsService: ProductsService //asincrono
   ) {
     this.myShoppingCart = this.storeService.getShoppingCart();
   }
 
   ngOnInit(): void {
+    this.productsService.getAllProducts()
+    .subscribe(data => {
+      console.log(data);
+      this.products = data;
+    });
   }
 
   onAddToShoppingCart(product: Product_Response): void {
