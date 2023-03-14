@@ -17,6 +17,8 @@ export class ProductsComponent implements OnInit {
   // renderizar una familia de productos
   // desde el padre
   products: Product_Response[] = [];
+  today = new Date();
+  date = new Date(2021, 1, 21);
 
   constructor(
     private storeService: StoreService,
