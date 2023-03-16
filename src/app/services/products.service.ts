@@ -13,6 +13,6 @@ export class ProductsService {
   ) { }
 
   public getAllProducts(): Observable<Product_Response[]> {
-    return this.http.get<Product_Response[]>('https://fakestoreapi.com/products');
+    return this.http.get<Product_Response[]>('https://young-sands-07814.herokuapp.com/api/products');
   }
 }
