@@ -18,6 +18,17 @@ export class ProductsComponent implements OnInit {
   // desde el padre
   products: Product_Response[] = [];
   showProductDetails = false;
+  productChosen: Product_Response = {
+    id: '',
+    title: '',
+    price: 0,
+    description: '',
+    category: {
+      id: '',
+      name: '',
+    },
+    images: []
+  };
 
   constructor(
     private storeService: StoreService,
@@ -47,6 +58,8 @@ export class ProductsComponent implements OnInit {
     this.productsService.getProduct(id)
     .subscribe(data => {
       console.log('product', data);
+      this.toggleProductDetail();
+      this.productChosen = data;
     });
   }
 }
