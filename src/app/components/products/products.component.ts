@@ -17,8 +17,7 @@ export class ProductsComponent implements OnInit {
   // renderizar una familia de productos
   // desde el padre
   products: Product_Response[] = [];
-  today = new Date();
-  date = new Date(2021, 1, 21);
+  showProductDetails = false;
 
   constructor(
     private storeService: StoreService,
@@ -35,8 +34,19 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  onAddToShoppingCart(product: Product_Response): void {
+  public onAddToShoppingCart(product: Product_Response): void {
     this.storeService.addProduct(product);
     this.total = this.storeService.getTotal();
+  }
+
+  public toggleProductDetail(): void {
+    this.showProductDetails = !this.showProductDetails;
+  }
+
+  public onShowDetail(id: string): void {
+    this.productsService.getProduct(id)
+    .subscribe(data => {
+      console.log('product', data);
+    });
   }
 }
