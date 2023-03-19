@@ -29,4 +29,8 @@ export class ProductsService {
   public update(id: string, dto: UpdateProductDTO) { //le tengo que decir que el objeto en la posicion tal es la que quiero editar
     return this.http.put<Product_Response>(`${this.apiUrl}/${id}`, dto);
   }
+
+  public delete(id: string) {
+    return this.http.delete<boolean>(`${this.apiUrl}/${id}`); //booleano porque nos indica si fue o no eliminado -> baja logica
+  }
 }
