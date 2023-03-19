@@ -33,6 +33,10 @@ export class ProductsComponent implements OnInit {
     images: [],
   };
 
+  //para hacerlo de forma dinamicamente, fijamos las CI
+  limit = 10;
+  offset = 0;
+
   constructor(
     private storeService: StoreService,
     private productsService: ProductsService //asincrono
@@ -41,9 +45,11 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllProducts().subscribe((data) => {
+    this.productsService.getProductsByPage(10, 0)
+    .subscribe((data) => {
       console.log(data);
       this.products = data;
+      this.offset += this.limit;
     });
   }
 
@@ -101,6 +107,20 @@ export class ProductsComponent implements OnInit {
       );
       this.products.splice(productIndex, 1);
       this.showProductDetails = false;
+    });
+  }
+
+  public loadMore() {
+    this.productsService.getProductsByPage(this.limit, this.offset)
+    .subscribe((data) => {
+      console.log(data);
+      // this.products = data; Estoy pisando los datos y en realidad necesito que se vayan concatenando
+      // sin embargo concat es un metodo de los arrays inmutable, es decir,
+      // no modifica el array original, entonces como necesitamos que lo modifique:
+      this.products = this.products.concat(data);
+      // incrementamos el offset cuando hagamos el
+      // siguiente request:
+      this.offset += this.limit;
     });
   }
 }

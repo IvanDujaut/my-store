@@ -1,32 +1,53 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { Product_Response, CreateProductDTO, UpdateProductDTO } from '../models/product.models';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  Product_Response,
+  CreateProductDTO,
+  UpdateProductDTO,
+} from '../models/product.models';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsService {
+  private apiUrl = 'https://young-sands-07814.herokuapp.com/api/products';
 
-  private apiUrl = 'https://young-sands-07814.herokuapp.com/api/products'
+  constructor(private http: HttpClient) {}
 
-  constructor(
-    private http: HttpClient
-  ) { }
-
-  public getAllProducts(): Observable<Product_Response[]> {
-    return this.http.get<Product_Response[]>(this.apiUrl);
+  // envio parametros de forma dinamica
+  public getAllProducts(
+    limit?: number,
+    offset?: number
+  ): Observable<Product_Response[]> {
+    let params = new HttpParams();// sirve para enviar parametros de forma dinamica
+    if(limit && offset){
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+    }
+    return this.http.get<Product_Response[]>(this.apiUrl, { params });
   }
 
   public getProduct(id: string): Observable<Product_Response> {
     return this.http.get<Product_Response>(`${this.apiUrl}/${id}`);
   }
 
+  // envio parametros de forma directa
+  public getProductsByPage(
+    limit: number,
+    offset: number
+  ): Observable<Product_Response[]> {
+    return this.http.get<Product_Response[]>(`${this.apiUrl}`, {
+      params: { limit, offset },
+    });
+  }
+
   public createProduct(dto: CreateProductDTO) {
     return this.http.post<Product_Response>(this.apiUrl, dto);
   }
 
-  public update(id: string, dto: UpdateProductDTO) { //le tengo que decir que el objeto en la posicion tal es la que quiero editar
+  public update(id: string, dto: UpdateProductDTO) {
+    //le tengo que decir que el objeto en la posicion tal es la que quiero editar
     return this.http.put<Product_Response>(`${this.apiUrl}/${id}`, dto);
   }
 
