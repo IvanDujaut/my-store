@@ -12,7 +12,7 @@ import { retry } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProductsService {
-  private apiUrl = 'https://young-sands-07814.herokuapppp.com/api/products';
+  private apiUrl = '/api/products';
 
   constructor(private http: HttpClient) {}
 
