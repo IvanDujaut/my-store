@@ -6,12 +6,13 @@ import {
   UpdateProductDTO,
 } from '../models/product.models';
 import { Observable } from 'rxjs';
+import { retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private apiUrl = 'https://young-sands-07814.herokuapp.com/api/products';
+  private apiUrl = 'https://young-sands-07814.herokuapppp.com/api/products';
 
   constructor(private http: HttpClient) {}
 
@@ -25,7 +26,10 @@ export class ProductsService {
       params = params.set('limit', limit);
       params = params.set('offset', offset);
     }
-    return this.http.get<Product_Response[]>(this.apiUrl, { params });
+    return this.http.get<Product_Response[]>(this.apiUrl, { params })
+    .pipe(
+      retry(3)
+    );
   }
 
   public getProduct(id: string): Observable<Product_Response> {
