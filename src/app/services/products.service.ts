@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { Product_Response, CreateProductDTO } from '../models/product.models';
+import { Product_Response, CreateProductDTO, UpdateProductDTO } from '../models/product.models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -24,5 +24,9 @@ export class ProductsService {
 
   public createProduct(dto: CreateProductDTO) {
     return this.http.post<Product_Response>(this.apiUrl, dto);
+  }
+
+  public update(id: string, dto: UpdateProductDTO) { //le tengo que decir que el objeto en la posicion tal es la que quiero editar
+    return this.http.put<Product_Response>(`${this.apiUrl}/${id}`, dto);
   }
 }

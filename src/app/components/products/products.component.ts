@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Product_Response, CreateProductDTO } from '../../models/product.models'
-import { StoreService } from '../../services/store.service'
-import { ProductsService } from '../../services/products.service'
+import {
+  Product_Response,
+  CreateProductDTO,
+  UpdateProductDTO,
+} from '../../models/product.models';
+import { StoreService } from '../../services/store.service';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-
   myShoppingCart: Product_Response[] = [];
   total = 0;
 
@@ -27,7 +30,7 @@ export class ProductsComponent implements OnInit {
       id: '',
       name: '',
     },
-    images: []
+    images: [],
   };
 
   constructor(
@@ -38,8 +41,7 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllProducts()
-    .subscribe(data => {
+    this.productsService.getAllProducts().subscribe((data) => {
       console.log(data);
       this.products = data;
     });
@@ -55,8 +57,7 @@ export class ProductsComponent implements OnInit {
   }
 
   public onShowDetail(id: string): void {
-    this.productsService.getProduct(id)
-    .subscribe(data => {
+    this.productsService.getProduct(id).subscribe((data) => {
       console.log('product', data);
       this.toggleProductDetail();
       this.productChosen = data;
@@ -65,16 +66,29 @@ export class ProductsComponent implements OnInit {
 
   public createNewProduct(): void {
     const product: CreateProductDTO = {
-      title:'Nuevo Producto',
+      title: 'Nuevo Producto',
       description: 'bla bla',
       images: ['https://placeimg.com/640/480/any'],
       price: 1000,
       categoryId: 2,
-    }
-    this.productsService.createProduct(product)
-    .subscribe(data => {
+    };
+    this.productsService.createProduct(product).subscribe((data) => {
       console.log('created', data);
-      this.products.unshift(data); //insertamos en el array en la primera posicion 
+      this.products.unshift(data); //insertamos en el array en la primera posicion
+    });
+  }
+
+  public updateProduct(): void {
+    const changes: UpdateProductDTO = {
+      title: 'change title',
+    };
+    const id = this.productChosen.id;
+    this.productsService.update(id, changes).subscribe((data) => {
+      console.log('updated', data);
+      const productIndex = this.products.findIndex(
+        (item) => item.id === this.productChosen.id
+      );
+      this.products[productIndex] = data;
     });
   }
 }
