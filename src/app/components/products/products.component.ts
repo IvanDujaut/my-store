@@ -36,6 +36,7 @@ export class ProductsComponent implements OnInit {
   //para hacerlo de forma dinamicamente, fijamos las CI
   limit = 10;
   offset = 0;
+  statusDetail: 'loading' | 'success' | 'error' | 'init' = 'init';
 
   constructor(
     private storeService: StoreService,
@@ -62,11 +63,35 @@ export class ProductsComponent implements OnInit {
     this.showProductDetails = !this.showProductDetails;
   }
 
-  public onShowDetail(id: string): void {
-    this.productsService.getProduct(id).subscribe((data) => {
+  /*public onShowDetail(id: string): void {
+    this.statusDetail = 'loading';
+    this.productsService.getProduct(id)
+    .subscribe((data) => {
       console.log('product', data);
       this.toggleProductDetail();
       this.productChosen = data;
+      this.statusDetail = 'success';
+    }, response => {
+      console.log(response);//error nativo que me mandaria el backend      this.statusDetail = 'error';
+      this.statusDetail = 'error';
+    });
+  }*/
+
+
+   public onShowDetail(id: string): void {
+    this.statusDetail = 'loading';
+    this.productsService.getProduct(id).subscribe({
+      next: (resp) => {
+        console.log('product', resp);
+        this.toggleProductDetail();
+        this.productChosen = resp;
+        this.statusDetail = 'success';
+      },
+      error: (errorMsg) => {
+        window.alert(errorMsg);
+        this.statusDetail = 'error';
+      },
+      complete: () => console.info('complete')
     });
   }
 
