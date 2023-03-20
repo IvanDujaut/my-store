@@ -8,11 +8,13 @@ import {
 import { Observable } from 'rxjs';
 import { retry } from 'rxjs/operators';
 
+import { environment } from './../../environments/environment' //Angular se encargara de elegir el archivo correspondiente dependiendo del modo en el que estemos
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private apiUrl = '/api/products';
+  private apiUrl = `${environment.API_URL}/api/products`;
 
   constructor(private http: HttpClient) {}
 
