@@ -9,6 +9,10 @@ export interface Product_Response {
   description: string;
   category: Category_Response;
   images: string[];
+  // va a tener un atributo mas que no va
+  // a ser calculado desde el backend sino desde
+  // el frontend y va a ser opcional.
+  taxes?: number;
 }
 
 export interface CreateProductDTO
@@ -17,5 +21,5 @@ export interface CreateProductDTO
 }
 
 export interface UpdateProductDTO extends Partial<CreateProductDTO> {
-  
+
 }
