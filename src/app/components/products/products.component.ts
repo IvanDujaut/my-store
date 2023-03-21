@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { switchMap } from 'rxjs/operators';
+import { zip } from 'rxjs';
 import {
   Product_Response,
   CreateProductDTO,
@@ -46,8 +47,7 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getProductsByPage(10, 0)
-    .subscribe((data) => {
+    this.productsService.getProductsByPage(10, 0).subscribe((data) => {
       console.log(data);
       this.products = data;
       this.offset += this.limit;
@@ -77,8 +77,7 @@ export class ProductsComponent implements OnInit {
     });
   }*/
 
-
-   public onShowDetail(id: string): void {
+  public onShowDetail(id: string): void {
     this.statusDetail = 'loading';
     this.productsService.getProduct(id).subscribe({
       next: (resp) => {
@@ -91,7 +90,72 @@ export class ProductsComponent implements OnInit {
         window.alert(errorMsg);
         this.statusDetail = 'error';
       },
-      complete: () => console.info('complete')
+      complete: () => console.info('complete'),
+    });
+  }
+
+  // public readAndUpdate(id: string) {
+  //   this.productsService
+  //     .getProduct(id)
+  //     .pipe(
+  //       switchMap((product) =>
+  //         this.productsService.update(product.id, { title: 'change' })
+  //       )
+  //       /**Cuantos switchMap quieras */
+  //       // switchMap((product) =>
+  //       //   this.productsService.update(product.id, { title: 'change' })
+  //       // )
+  //       // switchMap((product) =>
+  //       //   this.productsService.update(product.id, { title: 'change' })
+  //       // )
+  //     )
+  //     .subscribe((data) => {
+  //       {
+  //         // Apenas obtengamos el producto queremos enviar una actualizacion
+  //         // como podriamos hacer esto? Lo primero que diriamos es bueno dentro
+  //         // del subscribe apenas tengo ese producto vamos a darle un
+  //         // update
+  //         const product = data;
+  //         this.productsService
+  //           .update(product.id, { title: 'change' })
+  //           // y luego otro subscribe con la rta de la actualizacion
+  //           .subscribe((rtaUpdate) => {
+  //             console.log(rtaUpdate);
+  //             // esto es lo que hay que evitar, es aprte del Callback Hell
+  //             // porque, que pasa si dentro del Update despues de recibir
+  //             // la rta queremos ejecutar otra cosa internamente? Entonces
+  //             // se va abriendo cada vez anidando mas subscribe
+  //           });
+  //       }
+  //     });
+  // }
+
+  /** SwitchMap para resolver observables dependientes (sincrono)
+   *  Zip para resolver observables independendientes (asincrono)
+   * similar a Promise.all y recibir la rta al mismo tiempo.
+   * Esta logica deberia ir en el servicio no en el componente
+   * para poder reutilizarlo
+   */
+
+  public readAndUpdate(id: string) {
+    this.productsService
+      .getProduct(id)
+      .pipe(
+        switchMap((product) =>
+          this.productsService.update(product.id, { title: 'change' })
+        )
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
+    // zip(
+    //   this.productsService.getProduct(id),
+    //   this.productsService.update(id, { title: 'nuevo' })
+    // )
+    this.productsService.fetchReadAndUpdate(id, {title: 'change'})
+    .subscribe((response) => {
+      const read = response[0];
+      const update = response[1];
     });
   }
 
@@ -99,7 +163,7 @@ export class ProductsComponent implements OnInit {
     const product: CreateProductDTO = {
       title: 'Nuevo Producto',
       description: 'bla bla',
-      images: ['https://placeimg.com/640/480/any'],
+      images: [`https://placeimg.com/640/480/any?random=${Math.random()}`],
       price: 1000,
       categoryId: 2,
     };
@@ -125,8 +189,7 @@ export class ProductsComponent implements OnInit {
 
   public deleteProduct(): void {
     const id = this.productChosen.id;
-    this.productsService.delete(id)
-    .subscribe(() => {
+    this.productsService.delete(id).subscribe(() => {
       const productIndex = this.products.findIndex(
         (item) => item.id === this.productChosen.id
       );
@@ -136,16 +199,17 @@ export class ProductsComponent implements OnInit {
   }
 
   public loadMore() {
-    this.productsService.getProductsByPage(this.limit, this.offset)
-    .subscribe((data) => {
-      console.log(data);
-      // this.products = data; Estoy pisando los datos y en realidad necesito que se vayan concatenando
-      // sin embargo concat es un metodo de los arrays inmutable, es decir,
-      // no modifica el array original, entonces como necesitamos que lo modifique:
-      this.products = this.products.concat(data);
-      // incrementamos el offset cuando hagamos el
-      // siguiente request:
-      this.offset += this.limit;
-    });
+    this.productsService
+      .getProductsByPage(this.limit, this.offset)
+      .subscribe((data) => {
+        console.log(data);
+        // this.products = data; Estoy pisando los datos y en realidad necesito que se vayan concatenando
+        // sin embargo concat es un metodo de los arrays inmutable, es decir,
+        // no modifica el array original, entonces como necesitamos que lo modifique:
+        this.products = this.products.concat(data);
+        // incrementamos el offset cuando hagamos el
+        // siguiente request:
+        this.offset += this.limit;
+      });
   }
 }

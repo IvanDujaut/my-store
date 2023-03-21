@@ -10,7 +10,7 @@ import {
   CreateProductDTO,
   UpdateProductDTO,
 } from '../models/product.models';
-import { Observable } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
@@ -63,6 +63,17 @@ export class ProductsService {
         })
       )
     );
+  }
+
+  public fetchReadAndUpdate(id: string, dto: UpdateProductDTO) {
+    return zip(
+      this.getProduct(id),
+      this.update(id, dto)
+    )
+    // .subscribe((response) => {
+    //   const read = response[0];
+    //   const update = response[1];
+    // }); No se hace falta el subscribe porque estamos manjenando solo la logica
   }
 
   public getProduct(id: string): Observable<Product_Response> {
