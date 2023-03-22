@@ -13,6 +13,7 @@ import {
 import { Observable, zip } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { checkTime } from './../interceptors/time.interceptor';
 
 import { environment } from './../../environments/environment'; //Angular se encargara de elegir el archivo correspondiente dependiendo del modo en el que estemos
 
@@ -34,42 +35,41 @@ export class ProductsService {
       params = params.set('limit', limit);
       params = params.set('offset', offset);
     }
-    return this.http.get<Product_Response[]>(this.apiUrl, { params }).pipe(
-      retry(3),
-      /**
-       * Cada vez que un observable nos envia un valor sobre todo
-       * con http, va a ser toda la rta que envie el backend, una
-       * vez terminada eso y nos suscribamos y recibamos simplemente
-       * la rta luego uno se desuscribe.
-       * El primer map nos permite evaluar cada uno de los valores que llegan
-       * del observable, es decir, nos llegaria todo el array y
-       * podemos aplicarle una transformacion, entonces vamos a tener
-       * el array de products entero y luego le podremos aplicar
-       * una transformacion al array. Aca ya tendriamos nuestro map
-       * como un array de productos, recordemos: el primer map es
-       * para transformar los valores que llegan desde el
-       * observable, sin embargo products seria ya la data que
-       * nos estan enviando y como es un array tambien podriamos
-       * aplicar un map pero esta vez nativo de JS para hacer una
-       * transformacion a cada uno de los elementos
-       */
+    return this.http
+      .get<Product_Response[]>(this.apiUrl, { params, context: checkTime() }) // cada vez que queramos que alguna peticion sea evaluada por el timeInterceptor tendriamos que enviarle el contexto, de lo contrario correria para absolutamente todas las peticiones
+      .pipe(
+        retry(3),
+        /**
+         * Cada vez que un observable nos envia un valor sobre todo
+         * con http, va a ser toda la rta que envie el backend, una
+         * vez terminada eso y nos suscribamos y recibamos simplemente
+         * la rta luego uno se desuscribe.
+         * El primer map nos permite evaluar cada uno de los valores que llegan
+         * del observable, es decir, nos llegaria todo el array y
+         * podemos aplicarle una transformacion, entonces vamos a tener
+         * el array de products entero y luego le podremos aplicar
+         * una transformacion al array. Aca ya tendriamos nuestro map
+         * como un array de productos, recordemos: el primer map es
+         * para transformar los valores que llegan desde el
+         * observable, sin embargo products seria ya la data que
+         * nos estan enviando y como es un array tambien podriamos
+         * aplicar un map pero esta vez nativo de JS para hacer una
+         * transformacion a cada uno de los elementos
+         */
 
-      map((products) =>
-        products.map((items) => {
-          return {
-            ...items,
-            taxes: 0.19 * items.price,
-          };
-        })
-      )
-    );
+        map((products) =>
+          products.map((items) => {
+            return {
+              ...items,
+              taxes: 0.19 * items.price,
+            };
+          })
+        )
+      );
   }
 
   public fetchReadAndUpdate(id: string, dto: UpdateProductDTO) {
-    return zip(
-      this.getProduct(id),
-      this.update(id, dto)
-    )
+    return zip(this.getProduct(id), this.update(id, dto));
     // .subscribe((response) => {
     //   const read = response[0];
     //   const update = response[1];
