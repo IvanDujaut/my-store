@@ -8,7 +8,7 @@ export const environment = {
   dejamos en vacio porque en desarrollo no necesitamos esto
   porque tenemos un proxy que lo envia hacia el origen
   */
-  API_URL: 'https://young-sands-07814.herokuapp.com', //deberia ser vacio pero devuelve un 404, el proxy no funciona
+  API_URL: 'https://damp-spire-59848.herokuapp.com', //deberia ser vacio pero devuelve un 404, el proxy no funciona https://young-sands-07814.herokuapp.com
 };
 
 /*
